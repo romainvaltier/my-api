@@ -152,3 +152,9 @@ async def update_category(id: int, category: Category):
 @api.get("/equipments/", response_model=list[Equipment])
 async def read_equipments():
     return equipments
+
+
+@api.post("/equipments/")
+async def create_equipment(equipment: Equipment):
+    categories.append(equipment)
+    return equipment
