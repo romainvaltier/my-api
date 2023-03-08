@@ -1,0 +1,10 @@
+---
+version: '3.9'
+
+services:
+  my-api:
+    build: .
+    image: registry.valtier.fr/myapi:latest
+    container_name: my-api
+    ports:
+      - "3006:8000"
