@@ -96,6 +96,51 @@ categories = [
 ]
 
 
+def find_category(id) -> Optional[Category]:
+    for category in categories:
+        if category["id"] == id:
+            return category  # type: ignore
+    return None
+
+
+@api.get("/category/", response_model=list[Category])
+async def list_categories():
+    return categories
+
+
+@api.get("/category/{id}", response_model=Category)
+async def retrieve_category(id: int = 0):
+    category_to_retrieve = find_category(id)
+    return category_to_retrieve
+
+
+@api.post("/category/")
+async def create_category(category: Category):
+    create_category_encoded = jsonable_encoder(category)
+    categories.append(create_category_encoded)
+    return create_category_encoded
+
+
+@api.delete("/category/{id}", status_code=204)
+def delete_category(id: int) -> None:
+    category_to_remove = find_category(id)
+
+    if category_to_remove is not None:
+        categories.remove(category_to_remove)
+
+
+@api.put("/category/{id}", response_model=Category)
+async def update_category(id: int, category: Category):
+    update_category_encoded = jsonable_encoder(category)
+    category_to_update = find_category(id)
+
+    if category_to_update is not None:
+        categories.remove(category_to_update)
+        categories.append(update_category_encoded)
+    return update_category_encoded
+
+
+
 class Equipment(BaseModel):
     id: int
     name: str
@@ -111,51 +156,18 @@ equipments = [
         "categories": [categories[0], categories[1], categories[2]], "quantity": "5.25"},
 ]
 
-
-@api.get("/categories/", response_model=list[Category])
-async def read_categories():
-    return categories
-
-
-@api.post("/categories/")
-async def create_category(category: Category):
-    create_category_encoded = jsonable_encoder(category)
-    categories.append(create_category_encoded)
-    return create_category_encoded
-
-
-def find_category(id) -> Optional[Category]:
-    for category in categories:
-        if category["id"] == id:
-            return category
-    return None
-
-
-@api.delete("/categories/{id}", status_code=204)
-def delete_category(id: int) -> None:
-    category_to_remove = find_category(id)
-
-    if category_to_remove is not None:
-        categories.remove(category_to_remove)
-
-
-@api.put("/categories/{id}", response_model=Category)
-async def update_category(id: int, category: Category):
-    update_category_encoded = jsonable_encoder(category)
-    category_to_update = find_category(id)
-
-    if category_to_update is not None:
-        categories.remove(category_to_update)
-        categories.append(update_category_encoded)
-    return update_category_encoded
-
-
-@api.get("/equipments/", response_model=list[Equipment])
-async def read_equipments():
+@api.get("/equipment/", response_model=list[Equipment])
+async def list_equipments():
     return equipments
 
 
-@api.post("/equipments/")
+@api.get("/equipment/{id}", response_model=Equipment)
+async def retrieve_equipment(id: int = 0):
+    equipment_to_retrieve = find_equipment(id)
+    return equipment_to_retrieve
+
+
+@api.post("/equipment/")
 async def create_equipment(equipment: Equipment):
     create_equipment_encoded = jsonable_encoder(equipment)
     equipments.append(create_equipment_encoded)
@@ -165,11 +177,11 @@ async def create_equipment(equipment: Equipment):
 def find_equipment(id) -> Optional[Equipment]:
     for equipment in equipments:
         if equipment["id"] == id:
-            return equipment
+            return equipment  # type: ignore
     return None
 
 
-@api.delete("/equipments/{id}", status_code=204)
+@api.delete("/equipment/{id}", status_code=204)
 def delete_equipment(id: int) -> None:
     equipment_to_remove = find_equipment(id)
 
@@ -177,7 +189,7 @@ def delete_equipment(id: int) -> None:
         equipments.remove(equipment_to_remove)
 
 
-@api.put("/equipments/{id}", response_model=Equipment)
+@api.put("/equipment/{id}", response_model=Equipment)
 async def update_equipment(id: int, equipment: Equipment):
     update_equipment_encoded = jsonable_encoder(equipment)
     equipment_to_update = find_equipment(id)
