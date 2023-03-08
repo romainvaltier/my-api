@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from passlib.context import CryptContext
@@ -76,6 +76,8 @@ async def current_user(username: str = Depends(get_current_user)):
     return "Hello {}".format(username)
 
 
+# Category
+
 class Category(BaseModel):
     id: int
     name: str
@@ -99,13 +101,18 @@ categories = [
 def find_category(id) -> Optional[Category]:
     for category in categories:
         if category["id"] == id:
-            return category  # type: ignore
+            return category
     return None
 
 
 @api.get("/category/", response_model=list[Category])
-async def list_categories():
-    return categories
+async def list_categories(parent: str = Query(default=None)):
+    if parent is not None:
+        results = [
+            category for category in categories if category['parent'] == parent]
+    else:
+        results = categories
+    return results
 
 
 @api.get("/category/{id}", response_model=Category)
@@ -124,7 +131,6 @@ async def create_category(category: Category):
 @api.delete("/category/{id}", status_code=204)
 def delete_category(id: int) -> None:
     category_to_remove = find_category(id)
-
     if category_to_remove is not None:
         categories.remove(category_to_remove)
 
@@ -133,32 +139,51 @@ def delete_category(id: int) -> None:
 async def update_category(id: int, category: Category):
     update_category_encoded = jsonable_encoder(category)
     category_to_update = find_category(id)
-
     if category_to_update is not None:
         categories.remove(category_to_update)
         categories.append(update_category_encoded)
     return update_category_encoded
 
 
+# Equipment
+
 
 class Equipment(BaseModel):
     id: int
-    name: str
+    name: Optional[str] = None
     slug: str
-    categories: list[Category]
-    quantity: float
+    categories: Optional[list[Category]] = None
+    quantity: Optional[int] = 0
 
 
 equipments = [
     {"id": 0, "name": "Equipment A", "slug": "equipment-a",
-        "categories": [categories[0], categories[1]], "quantity": "10"},
+        "categories": [categories[0], categories[1]], "quantity": 10},
     {"id": 1, "name": "Equipment B", "slug": "equipment-b",
-        "categories": [categories[0], categories[1], categories[2]], "quantity": "5.25"},
+        "categories": [categories[0], categories[1], categories[2]], "quantity": 5},
+    {"id": 2, "name": "Equipment A", "slug": "equipment-a",
+        "categories": [categories[0], categories[1]], "quantity": 0},
+    {"id": 3, "name": "Equipment B", "slug": "equipment-b",
+        "categories": [categories[0], categories[1], categories[2]], "quantity": 15},
 ]
 
+
+def find_equipment(id) -> Optional[Equipment]:
+    for equipment in equipments:
+        if equipment["id"] == id:
+            return equipment
+    return None
+
+
 @api.get("/equipment/", response_model=list[Equipment])
-async def list_equipments():
-    return equipments
+async def list_equipments(quantity_min: int = Query(default=0, ge=0), quantity_max: int = Query(default=0, ge=0)):
+    if quantity_max > quantity_min:
+        results = [equipment for equipment in equipments if quantity_min <=
+                   equipment['quantity'] <= quantity_max]
+    else:
+        results = [equipment for equipment in equipments if equipment['quantity']
+                   >= quantity_min]
+    return results
 
 
 @api.get("/equipment/{id}", response_model=Equipment)
@@ -174,17 +199,9 @@ async def create_equipment(equipment: Equipment):
     return create_equipment_encoded
 
 
-def find_equipment(id) -> Optional[Equipment]:
-    for equipment in equipments:
-        if equipment["id"] == id:
-            return equipment  # type: ignore
-    return None
-
-
 @api.delete("/equipment/{id}", status_code=204)
 def delete_equipment(id: int) -> None:
     equipment_to_remove = find_equipment(id)
-
     if equipment_to_remove is not None:
         equipments.remove(equipment_to_remove)
 
@@ -193,7 +210,6 @@ def delete_equipment(id: int) -> None:
 async def update_equipment(id: int, equipment: Equipment):
     update_equipment_encoded = jsonable_encoder(equipment)
     equipment_to_update = find_equipment(id)
-
     if equipment_to_update is not None:
         equipments.remove(equipment_to_update)
         equipments.append(update_equipment_encoded)
