@@ -106,7 +106,7 @@ def find_category(id) -> Optional[Category]:
 
 
 @api.get("/category/", response_model=list[Category])
-async def list_categories(parent: str = Query(default=None)):
+async def list_categories(parent: str = Query(default=None), username: str = Depends(get_current_user)):
     if parent is not None:
         results = [
             category for category in categories if category['parent'] == parent]
@@ -116,27 +116,27 @@ async def list_categories(parent: str = Query(default=None)):
 
 
 @api.get("/category/{id}", response_model=Category)
-async def retrieve_category(id: int = 0):
+async def retrieve_category(id: int = 0, username: str = Depends(get_current_user)):
     category_to_retrieve = find_category(id)
     return category_to_retrieve
 
 
 @api.post("/category/")
-async def create_category(category: Category):
+async def create_category(category: Category, username: str = Depends(get_current_user)):
     create_category_encoded = jsonable_encoder(category)
     categories.append(create_category_encoded)
     return create_category_encoded
 
 
 @api.delete("/category/{id}", status_code=204)
-def delete_category(id: int) -> None:
+def delete_category(id: int, username: str = Depends(get_current_user)) -> None:
     category_to_remove = find_category(id)
     if category_to_remove is not None:
         categories.remove(category_to_remove)
 
 
 @api.put("/category/{id}", response_model=Category)
-async def update_category(id: int, category: Category):
+async def update_category(id: int, category: Category, username: str = Depends(get_current_user)):
     update_category_encoded = jsonable_encoder(category)
     category_to_update = find_category(id)
     if category_to_update is not None:
@@ -176,7 +176,7 @@ def find_equipment(id) -> Optional[Equipment]:
 
 
 @api.get("/equipment/", response_model=list[Equipment])
-async def list_equipments(quantity_min: int = Query(default=0, ge=0), quantity_max: int = Query(default=0, ge=0)):
+async def list_equipments(quantity_min: int = Query(default=0, ge=0), quantity_max: int = Query(default=0, ge=0), username: str = Depends(get_current_user)):
     if quantity_max > quantity_min:
         results = [equipment for equipment in equipments if quantity_min <=
                    equipment['quantity'] <= quantity_max]
@@ -187,27 +187,27 @@ async def list_equipments(quantity_min: int = Query(default=0, ge=0), quantity_m
 
 
 @api.get("/equipment/{id}", response_model=Equipment)
-async def retrieve_equipment(id: int = 0):
+async def retrieve_equipment(id: int = 0, username: str = Depends(get_current_user)):
     equipment_to_retrieve = find_equipment(id)
     return equipment_to_retrieve
 
 
 @api.post("/equipment/")
-async def create_equipment(equipment: Equipment):
+async def create_equipment(equipment: Equipment, username: str = Depends(get_current_user)):
     create_equipment_encoded = jsonable_encoder(equipment)
     equipments.append(create_equipment_encoded)
     return create_equipment_encoded
 
 
 @api.delete("/equipment/{id}", status_code=204)
-def delete_equipment(id: int) -> None:
+def delete_equipment(id: int, username: str = Depends(get_current_user)) -> None:
     equipment_to_remove = find_equipment(id)
     if equipment_to_remove is not None:
         equipments.remove(equipment_to_remove)
 
 
 @api.put("/equipment/{id}", response_model=Equipment)
-async def update_equipment(id: int, equipment: Equipment):
+async def update_equipment(id: int, equipment: Equipment, username: str = Depends(get_current_user)):
     update_equipment_encoded = jsonable_encoder(equipment)
     equipment_to_update = find_equipment(id)
     if equipment_to_update is not None:
