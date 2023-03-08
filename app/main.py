@@ -101,14 +101,14 @@ class Equipment(BaseModel):
     name: str
     slug: str
     categories: list[Category]
-    quantity: str
+    quantity: float
 
 
 equipments = [
     {"id": 0, "name": "Equipment A", "slug": "equipment-a",
         "categories": [categories[0], categories[1]], "quantity": "10"},
     {"id": 1, "name": "Equipment B", "slug": "equipment-b",
-        "categories": [categories[0], categories[1], categories[2]], "quantity": "5-10"},
+        "categories": [categories[0], categories[1], categories[2]], "quantity": "5.25"},
 ]
 
 
@@ -119,8 +119,9 @@ async def read_categories():
 
 @api.post("/categories/")
 async def create_category(category: Category):
-    categories.append(category)
-    return category
+    create_category_encoded = jsonable_encoder(category)
+    categories.append(create_category_encoded)
+    return create_category_encoded
 
 
 def find_category(id) -> Optional[Category]:
@@ -156,5 +157,32 @@ async def read_equipments():
 
 @api.post("/equipments/")
 async def create_equipment(equipment: Equipment):
-    categories.append(equipment)
-    return equipment
+    create_equipment_encoded = jsonable_encoder(equipment)
+    equipments.append(create_equipment_encoded)
+    return create_equipment_encoded
+
+
+def find_equipment(id) -> Optional[Equipment]:
+    for equipment in equipments:
+        if equipment["id"] == id:
+            return equipment
+    return None
+
+
+@api.delete("/equipments/{id}", status_code=204)
+def delete_equipment(id: int) -> None:
+    equipment_to_remove = find_equipment(id)
+
+    if equipment_to_remove is not None:
+        equipments.remove(equipment_to_remove)
+
+
+@api.put("/equipments/{id}", response_model=Equipment)
+async def update_equipment(id: int, equipment: Equipment):
+    update_equipment_encoded = jsonable_encoder(equipment)
+    equipment_to_update = find_equipment(id)
+
+    if equipment_to_update is not None:
+        equipments.remove(equipment_to_update)
+        equipments.append(update_equipment_encoded)
+    return update_equipment_encoded
