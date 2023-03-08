@@ -91,6 +91,8 @@ categories = [
         "description": "This is category B", "parent": "p1"},
     {"id": 2, "name": "Category C", "slug": "category-c",
         "description": "This is category C", "parent": "p2"},
+    {"id": 7, "name": "Category D", "slug": "category-d",
+        "description": "This is category D", "parent": "p7"},
 ]
 
 
@@ -121,9 +123,9 @@ async def create_category(category: Category):
     return category
 
 
-def find_category(category_id) -> Optional[Category]:
+def find_category(id) -> Optional[Category]:
     for category in categories:
-        if category.id == category_id:
+        if category["id"] == id:
             return category
     return None
 
@@ -136,10 +138,14 @@ def delete_category(id: int) -> None:
         categories.remove(category_to_remove)
 
 
-@api.put("/categories/{category_id}", response_model=Category)
-async def update_category(category_id: int, category: Category):
+@api.put("/categories/{id}", response_model=Category)
+async def update_category(id: int, category: Category):
     update_category_encoded = jsonable_encoder(category)
-    categories[category_id] = update_category_encoded
+    category_to_update = find_category(id)
+
+    if category_to_update is not None:
+        categories.remove(category_to_update)
+        categories.append(update_category_encoded)
     return update_category_encoded
 
 
