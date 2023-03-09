@@ -11,7 +11,7 @@ pipeline {
                     sh 'docker login registry.valtier.fr -u ${registry_usr} -p ${registry_pwd}'
                 }
                 sh 'docker pull registry.valtier.fr/my-api:latest'
-                sh 'docker stack rm drone-racing || true'
+                sh 'docker stack rm my-api || true'
                 sleep 15
                 sh 'docker stack deploy --compose-file docker-compose-stack.yml my-api'
                 sh 'docker logout registry.valtier.fr'
