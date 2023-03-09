@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<testsuites>
-    <testsuite name="pytest" errors="0" failures="0" skipped="0" tests="5" time="5.102"
-        timestamp="2023-03-09T12:59:09.050437" hostname="penguin">
-        <testcase classname="app.test_main" name="test_read_main" time="0.110" />
-        <testcase classname="app.test_main" name="test_get_user_valid_user" time="0.385" />
-        <testcase classname="app.test_main" name="test_get_user_invalid_user" time="0.010" />
-        <testcase classname="app.test_main" name="test_retrieve_category_exist" time="0.394" />
-        <testcase classname="app.test_main" name="test_retrieve_category_notexist" time="0.433" />
-    </testsuite>
-</testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="7" time="5.528" timestamp="2023-03-09T13:17:00.905642" hostname="penguin"><testcase classname="app.test_main" name="test_read_main" time="0.058" /><testcase classname="app.test_main" name="test_get_user_valid_user" time="0.414" /><testcase classname="app.test_main" name="test_get_user_invalid_user" time="0.062" /><testcase classname="app.test_main" name="test_retrieve_category_exist" time="0.445" /><testcase classname="app.test_main" name="test_retrieve_category_notexist" time="0.510" /><testcase classname="app.test_main" name="test_delete_category_notused" time="0.458" /><testcase classname="app.test_main" name="test_delete_category_used" time="0.431" /></testsuite></testsuites>

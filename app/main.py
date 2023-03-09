@@ -154,6 +154,9 @@ def delete_category(id: int, username: str = Depends(get_current_user)) -> None:
     if category_to_remove is not None:
         if not category_used(id):
             categories.remove(category_to_remove)
+        else:
+            raise HTTPException(
+                status_code=400, detail="Cannot delete category still in use")
 
 
 @api.put("/category/{id}", response_model=Category)

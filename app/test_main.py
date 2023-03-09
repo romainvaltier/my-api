@@ -38,3 +38,13 @@ def test_retrieve_category_exist():
 def test_retrieve_category_notexist():
     response = client.get("/category/9", auth=("pierre", "arronax"))
     assert response.status_code == 204
+
+
+def test_delete_category_notused():
+    response = client.delete("/category/7", auth=("captain", "nemo"))
+    assert response.status_code == 204
+
+
+def test_delete_category_used():
+    response = client.delete("/category/0", auth=("captain", "nemo"))
+    assert response.status_code == 400
