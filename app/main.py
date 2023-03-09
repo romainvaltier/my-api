@@ -11,14 +11,9 @@ description = """
 
 My-API helps you do awesome stuff. 🚀
 
-## user
-blabla...
+__Source :__ [https://github.com/romainvaltier/my-api.git](https://github.com/romainvaltier/my-api.git)
 
-## categorie
-blabla...
-
-## equipement
-blabla...
+__Additional information :__ [https://github.com/romainvaltier/my-api#readme](https://github.com/romainvaltier/my-api#readme)
 
 """
 
