@@ -33,3 +33,8 @@ def test_retrieve_category_exist():
         "description": "This is category A",
         "parent": "p0"
     }
+
+
+def test_retrieve_category_notexist():
+    response = client.get("/category/9", auth=("pierre", "arronax"))
+    assert response.status_code == 204

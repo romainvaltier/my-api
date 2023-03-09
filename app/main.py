@@ -216,7 +216,10 @@ async def retrieve_equipment(id: int = 0, username: str = Depends(get_current_us
     if username not in users:
         raise HTTPException(status_code=400, detail="Invalid User")
     equipment_to_retrieve = find_equipment(id)
-    return equipment_to_retrieve
+    if equipment_to_retrieve is not None:
+        return equipment_to_retrieve
+    else:
+        raise HTTPException(status_code=204, detail="No Content")
 
 
 @api.post("/equipment/")
