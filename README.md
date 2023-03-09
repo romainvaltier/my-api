@@ -1,5 +1,7 @@
 # My-API helps you do awesome stuff. 🚀
 
+My-API is available here: [https://my-api.valtier.fr/docs](https://my-api.valtier.fr/docs)
+
 ## user
 
 - Only authentified users can get access to the API
