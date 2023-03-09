@@ -114,6 +114,14 @@ def category_used(id):
         return False
 
 
+def category_name_used(name):
+    category_names_used = set(category["name"] for category in categories)
+    if name in category_names_used:
+        return True
+    else:
+        return False
+
+
 @api.get("/category/", response_model=list[Category])
 async def list_categories(parent: str = Query(default=None), username: str = Depends(get_current_user)):
     if username not in users:
@@ -142,8 +150,12 @@ async def create_category(category: Category, username: str = Depends(get_curren
     if username != "captain":
         raise HTTPException(status_code=400, detail="Invalid User")
     create_category_encoded = jsonable_encoder(category)
-    categories.append(create_category_encoded)
-    return create_category_encoded
+    if not category_name_used(create_category_encoded["name"]):
+        categories.append(create_category_encoded)
+        return create_category_encoded
+    else:
+        raise HTTPException(
+            status_code=400, detail="Cannot create category : name already exists")
 
 
 @api.delete("/category/{id}", status_code=204)
@@ -156,7 +168,7 @@ def delete_category(id: int, username: str = Depends(get_current_user)) -> None:
             categories.remove(category_to_remove)
         else:
             raise HTTPException(
-                status_code=400, detail="Cannot delete category still in use")
+                status_code=400, detail="Cannot delete category : still in use")
 
 
 @api.put("/category/{id}", response_model=Category)
