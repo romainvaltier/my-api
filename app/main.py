@@ -60,7 +60,7 @@ def get_current_user(credentials: HTTPBasicCredentials = Depends(security)):
     ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Basic"},
         )
     return credentials.username
@@ -73,7 +73,7 @@ async def get_index():
 
 @api.get("/user")
 async def current_user(username: str = Depends(get_current_user)):
-    return "Hello {}".format(username)
+    return {"message": "Hello {}".format(username)}
 
 
 # Category
@@ -131,7 +131,10 @@ async def retrieve_category(id: int = 0, username: str = Depends(get_current_use
     if username not in users:
         raise HTTPException(status_code=400, detail="Invalid User")
     category_to_retrieve = find_category(id)
-    return category_to_retrieve
+    if category_to_retrieve is not None:
+        return category_to_retrieve
+    else:
+        raise HTTPException(status_code=204, detail="No Content")
 
 
 @api.post("/category/")
