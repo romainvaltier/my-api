@@ -9,7 +9,7 @@ networks:
       encrypted: "true"
 
 services:
-  drone-racing:
+  my-api:
     image: registry.valtier.fr/my-api:latest
     ports:
       - "3006:8000"
