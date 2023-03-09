@@ -105,6 +105,15 @@ def find_category(id) -> Optional[Category]:
     return None
 
 
+def category_used(id):
+    categories_used = set(
+        category["id"] for equipment in equipments for category in equipment["categories"])
+    if id in categories_used:
+        return True
+    else:
+        return False
+
+
 @api.get("/category/", response_model=list[Category])
 async def list_categories(parent: str = Query(default=None), username: str = Depends(get_current_user)):
     if parent is not None:
@@ -132,7 +141,8 @@ async def create_category(category: Category, username: str = Depends(get_curren
 def delete_category(id: int, username: str = Depends(get_current_user)) -> None:
     category_to_remove = find_category(id)
     if category_to_remove is not None:
-        categories.remove(category_to_remove)
+        if not category_used(id):
+            categories.remove(category_to_remove)
 
 
 @api.put("/category/{id}", response_model=Category)
