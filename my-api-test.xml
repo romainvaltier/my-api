@@ -1,1 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="5" time="4.293" timestamp="2023-03-09T12:55:36.682268" hostname="penguin"><testcase classname="app.test_main" name="test_read_main" time="0.129" /><testcase classname="app.test_main" name="test_get_user_valid_user" time="0.402" /><testcase classname="app.test_main" name="test_get_user_invalid_user" time="0.011" /><testcase classname="app.test_main" name="test_retrieve_category_exist" time="0.458" /><testcase classname="app.test_main" name="test_retrieve_category_notexist" time="0.410" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+    <testsuite name="pytest" errors="0" failures="0" skipped="0" tests="5" time="5.102"
+        timestamp="2023-03-09T12:59:09.050437" hostname="penguin">
+        <testcase classname="app.test_main" name="test_read_main" time="0.110" />
+        <testcase classname="app.test_main" name="test_get_user_valid_user" time="0.385" />
+        <testcase classname="app.test_main" name="test_get_user_invalid_user" time="0.010" />
+        <testcase classname="app.test_main" name="test_retrieve_category_exist" time="0.394" />
+        <testcase classname="app.test_main" name="test_retrieve_category_notexist" time="0.433" />
+    </testsuite>
+</testsuites>
