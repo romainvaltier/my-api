@@ -1,0 +1,23 @@
+pipeline {
+    agent none
+    stages{
+        stage('Deploy stack - my-api') {
+            agent {
+                label 'swarm-manager'
+            }
+            steps {
+                git credentialsId: '1731b5b1-2f8c-4419-a8d5-dacce5992ab2', url: 'https://github.com/romainvaltier/my-api.git'
+                withCredentials([usernamePassword(credentialsId: 'dcbdecc9-dc95-4a3c-bfaf-a5e3132f6883', passwordVariable: 'registry_pwd', usernameVariable: 'registry_usr')]) {
+                    sh 'docker login registry.valtier.fr -u ${registry_usr} -p ${registry_pwd}'
+                }
+                sh 'docker pull registry.valtier.fr/my-api:latest'
+                sh 'docker stack rm drone-racing || true'
+                sleep 15
+                sh 'docker stack deploy --compose-file docker-compose-stack.yml my-api'
+                sh 'docker logout registry.valtier.fr'
+                sh 'docker image prune -f'
+                cleanWs()
+            }
+        }
+    }
+}

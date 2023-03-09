@@ -1,0 +1,19 @@
+pipeline {
+    agent none
+    stages{
+        stage('Build and push docker image') {
+            agent {
+                label 'docker && arm64'
+            }
+            steps {
+                git credentialsId: '1731b5b1-2f8c-4419-a8d5-dacce5992ab2', url: 'https://github.com/romainvaltier/my-api.git'
+                withCredentials([usernamePassword(credentialsId: 'dcbdecc9-dc95-4a3c-bfaf-a5e3132f6883', passwordVariable: 'registry_pwd', usernameVariable: 'registry_usr')]) {
+                    sh 'docker login registry.valtier.fr -u ${registry_usr} -p ${registry_pwd}'
+                }
+                sh 'docker buildx build --platform linux/arm64 --no-cache -f Dockerfile -t registry.valtier.fr/my-api:latest . --push'
+                sh 'docker logout registry.valtier.fr'
+                cleanWs()
+            }
+        }
+    }
+}

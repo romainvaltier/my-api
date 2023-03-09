@@ -1,0 +1,17 @@
+---
+version: '3.9'
+
+networks:
+  network:
+    driver: overlay
+    attachable: true
+    driver_opts:
+      encrypted: "true"
+
+services:
+  drone-racing:
+    image: registry.valtier.fr/my-api:latest
+    ports:
+      - "3006:8000"
+    networks:
+      - network
