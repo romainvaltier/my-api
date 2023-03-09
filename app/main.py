@@ -15,6 +15,20 @@ __Source :__ [https://github.com/romainvaltier/my-api.git](https://github.com/ro
 
 __Additional information :__ [https://github.com/romainvaltier/my-api#readme](https://github.com/romainvaltier/my-api#readme)
 
+__How to use :__
+
+- Only authentified users can get access to the API
+- Only **Captain Nemo** can access to create, update and delete endpoints
+- Captain Nemo:
+  - username = captain
+  - password = nemo
+- Ned Land:
+  - username = ned
+  - password = land
+- Pierre Arronax
+  - username = pierre
+  - password = arronax
+
 """
 
 api = FastAPI(title="My-API", description=description)

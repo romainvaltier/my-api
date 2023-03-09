@@ -4,6 +4,15 @@
 
 - Only authentified users can get access to the API
 - Only **Captain Nemo** can access to create, update and delete endpoints
+- Captain Nemo:
+  - username = captain
+  - password = nemo
+- Ned Land:
+  - username = ned
+  - password = land
+- Pierre Arronax
+  - username = pierre
+  - password = arronax
 
 ## categorie
 
