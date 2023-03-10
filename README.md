@@ -5,7 +5,7 @@ My-API is available here: [https://my-api.valtier.fr/docs](https://my-api.valtie
 ## user
 
 - Only authentified users can get access to the API
-- Only **Captain Nemo** can access to create, update and delete endpoints
+- Only **Captain Nemo** can access create, update and delete endpoints
 - Captain Nemo:
   - username = captain
   - password = nemo
