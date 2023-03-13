@@ -15,5 +15,3 @@ services:
       - "3006:8000"
     networks:
       - network
-    deploy:
-      mode: global
