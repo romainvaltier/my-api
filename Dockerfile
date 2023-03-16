@@ -5,7 +5,7 @@ RUN python -m venv /usr/app/venv
 ENV PATH="/usr/app/venv/bin:$PATH"
 
 COPY requirements.txt .
-RUN pip3 install --use-pep517 -r requirements.txt
+RUN pip3 install --quiet --no-cache-dir --use-pep517 -r requirements.txt
 
 FROM python:3.11-slim
 LABEL org.opencontainers.image.authors="romain@valtier.fr"
