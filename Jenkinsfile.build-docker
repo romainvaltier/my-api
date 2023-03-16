@@ -1,5 +1,7 @@
 pipeline {
-    agent docker { image 'node:docker' }
+    agent {
+        docker { image 'node:docker' }
+    }
     stages{
         stage('Build and push docker image') {
             steps {
