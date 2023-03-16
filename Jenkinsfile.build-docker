@@ -1,11 +1,8 @@
 pipeline {
-    agent {
-        none
-    }
+    agent none
     stages{
         stage('Build and push docker image') {
             agent {
-                label 'docker && arm64'
                 docker {
                     image 'docker:git'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
