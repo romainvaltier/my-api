@@ -1,9 +1,14 @@
 pipeline {
-    agent none
+    agent {
+        label 'docker && arm64'
+    }
     stages{
         stage('Build and push docker image') {
             agent {
-                label 'docker && arm64'
+                docker {
+                    image 'docker:git'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
             }
             steps {
                 git credentialsId: '1731b5b1-2f8c-4419-a8d5-dacce5992ab2', url: 'https://github.com/romainvaltier/my-api.git'
